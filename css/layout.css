@@ -1,0 +1,16 @@
+.container{width:950px;margin:0 auto;overflow:hidden;}
+#header .container { margin:0 auto;padding:0 0 6px 0;overflow:visible; position:relative;}
+.context {background:#EEEEEE;position:relative;}
+.context .container,.footer .container{position:relative;top:-85px;}
+.context .container{
+	background:none;
+	-moz-box-shadow:35px 35px 6px -35px rgba(0,0,0,0.5),-35px 35px 6px -35px rgba(0,0,0,0.5);
+	-webkit-box-shadow:35px 35px 6px -35px rgba(0,0,0,0.5),-35px 35px 6px -35px rgba(0,0,0,0.5);
+	box-shadow:35px 35px 6px -35px rgba(0,0,0,0.5),-35px 35px 6px -35px rgba(0,0,0,0.5);
+}
+body {overflow-x:hidden}
+#header {background:url(/images/header-bg.gif) left top repeat-y rgb(131,17,20);height:150px }
+
+.context .picbg1 .container{position:relative;}
+
+.col-1, .col-2, .col-3 { float:left;}
