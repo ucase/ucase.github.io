@@ -222,3 +222,19 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 .blog a{
 	color:#f39c12;
 }
+/*招生咨询**/
+.consult h3{
+	font-weight:border;
+	text-align:center;
+}
+.consult p{
+	text-indent:2em;
+	line-height:1.5em;
+}
+
+.consult a{
+	color:#f39c12;
+}
+.blog a{
+	color:#f39c12;
+}
