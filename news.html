@@ -1,0 +1,32 @@
+---
+layout: default
+#文章标题
+title:  "news"
+########下面的设置需要删掉前面的"#"#########
+#自定义日期
+#date: 2014-05-16 11:12:47 +0800
+#categories: 文章分类，不同分类之间使用空格分割
+#tags: 文章的标签，即关键字，不同标签之间使用空格分割
+#excerpt:  "在此处填写文章的摘要，默认为文章的第一段"
+
+###########高级设置##############
+permalink: /news/
+#####
+---
+
+<div class="news">
+	<ul>
+	{% for post in site.posts %}
+		<li>
+		<a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+		<span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+		{{ post.excerpt }}
+		</li>
+	{% endfor %}
+        <li>
+		<p class="title"><a class="post-link" href="/riji">网站开发日记</a>
+		<span class="post-date">May 16,2014</span></p>
+		<p class="excerpt">现在，就是需要一个人能够设计网站的PSD文件，要求是一次设计好，不要改来改去的，即使使用目前这个页面的设计也可以，只要你能完成它（下载，木有PSD文件）。目前的页面就是这样（这也是我不喜欢当前这个页面以方面的原因），有些相同的的东西都原本可以使用相同的代码，可是没有，这个真的是不应该出现的情况，可是又有什么办法呢。有一个笑话说杀死一个程序员的方法是改三次需求。所以要一次设计好页面的风格，我只要完整的PSD文件。</p>
+		</li>
+    </ul>
+</div>

@@ -204,10 +204,13 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 
 /*blog*/
 .blog h1 {
-	padding-bottom:3px;
+	line-height:1.1em;
 }
-.blog p {
-	padding-bottom:1em;
+.blog .blog-content {
+	padding-top:2em;
+}
+.blog .blog-content p {
+	padding-bottom:0.5em;
 	line-height:1.5em;
 	text-indent:2em
 }
@@ -215,12 +218,28 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 	padding-bottom:1em;
 }
 .blog p.date{
-	padding-bottom:2em;
 	color:#bdc3c7;
-	text-indent:0em;
 }
 .blog a{
 	color:#f39c12;
+}
+/*news*/
+.news .title{
+	padding:5px;	
+}
+.news .excerpt{
+	line-height:1.5em;
+	text-indent:2em;
+	padding:0.5em;
+	color:#bdc3c7;
+	background:#ecf0f1;
+}
+.news a{
+	font-size:x-large;
+	color:#f39c12;
+}
+.news .post-date{
+	color:#bdc3c7;
 }
 /*招生咨询**/
 .consult h3{
@@ -235,6 +254,4 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 .consult a{
 	color:#f39c12;
 }
-.blog a{
-	color:#f39c12;
-}
+
