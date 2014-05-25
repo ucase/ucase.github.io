@@ -1,0 +1,75 @@
+---
+layout: blog
+#文章标题
+title:  "Google Chart之Formulas（TeX数学公式）"
+author: "阿宗"
+########基本设置#########
+#自定义日期
+#date:   2014-05-16 11:12:47 +0800
+#categories: 文章分类，不同分类之间使用空格分割
+#tags: 文章的标签，即关键字，不同标签之间使用空格分割
+excerpt:  "今天要解决在网页上输入公式的问题，一般我们在网页上输入公式使用的都是用相关软件把公式做出来，然后截图，然或把图片保存到网页上，这是很麻烦的。反正我知道我说HTTP请求大家也不懂，总之就是你给Google发送TeX，Google给你返回对应的数学公式图片。很多时候我基本上不选择使用Google的服务，可是很多时候百度没有类似的服务，我就实在是没办法了。其实这只是Google Chart的一小部分的内容，你可以使用Google Chart画很多种图形，比如，饼图，线性图，地图，雷达图，散点图，维恩图而且可以生成二维码。"
+###########高级设置##############
+#id: /blog/year/month/title
+#permalink: /blog/year/month/title.html
+#
+############简要说明##########
+#文档标题命名方式
+#文件名为:"年-月-日-文章题目"
+#文章题目最好为英文空格使用“-”代替
+#扩展名可以为:md、textile或者是html(视选用不同的语言写)
+#例如"2014-05-20-my-first-blog.html"
+#公式的输入
+#图片默认读取高度30px（可以通过添加height属性改变，不包括单位）
+#行间公式显示为高度为30px，行内公式为18px（可通过添加style改变）
+#<p class="formula"><img class="latex" src="#" alt="在此输入Tex的代码"><span class="formulaNO">公式编号</span></p>
+#行内公式只使用<img class="latex" src="#" alt="在此输入Tex的代码">就可以了
+---
+<p>今天，就是要解决在网页上输入公式的问题，一般我们在网页上输入公式使用的都是用相关软件把公式做出来，然后截图，然或把图片保存到网页上，这是很麻烦的。今天体检回来找了上网找发现<a target="_blank" href="http://www.mathjax.org/">mathjax</a>支持<a target="_blank" href="http://www.latex-project.org/">Latex</a>的数学公式排版，不过好像这个虽然是在浏览器端解析但是其源码需要自己编译，看起来不是那么的方便。后来听<a target="_blank" href="http://www.ruanyifeng.com/blog/">阮一峰</a>说，<a href="https://developers.google.com/chart/" target="_blank">Google Chart</a>支持TeX，而且使用也很方便。反正我知道我说HTTP请求大家也不懂，总之就是你给Google发送TeX，Google给你返回对应的数学公式图片。很多时候我基本上不选择使用Google的服务，原因我就不说了，可是很多时候百度没有类似的服务，我就实在是没办法了。</p>
+<p>先给大家看结果吧。如果你实在不想输，直接点提交就好了。</p>
+<div style="background:#bdc3c7;padding:1em 2em">
+<form action="http://chart.googleapis.com/chart" method="post" target="_blank">
+	<input type="hidden" id="cht" name="cht" value="tx" />
+	<p class="noident">
+		<label for="chs">图片大小：		
+		<input type="text" id="chs" name="chs" value="150x120"/>（宽x高或者只是有高度或是留空，英文字母x）
+		</label>
+	</p>
+	<p class="noident">
+		<label for="chco">前景色:
+		<input type="text" id="chco" name="chco" value=""/>(16进制RRGGBB，例如FF0000表示红色)
+		</label>
+	</p>
+	<p class="noident">
+		<label for="chf">
+		<input type="checkbox" id="chf" name="chf" value="bg,s,00000000"/>背景透明（部分浏览器打开后不一定能看出透明，但保存后确实是透明的）
+		</label>
+	</p>
+	<p class="noident">
+		在此输入TeX代码
+	</p>
+	<p class="noident">
+		<textarea id="chl" name="chl" style="width:100%" rows="5">E=mc^2 \\ 
+\alpha \beta \gamma \\ 
+\sum x_i</textarea>
+	</p>
+	<p class="noident">
+		<input type="submit" value="提交">
+		<input type="reset" value="重置">
+	</p>
+</form>
+</div>
+<p>功能有限，也没做语法检查，但是满足一般的使用需求。我知道没有人小记那么多的TeX命令，所以以后还会添加快速插入希腊字母，特殊数学符号的功能。虽说访问Google的速度不一定怎么样，但是访问Google API的速度还是跟其他网站没有区别的。。。。</p>
+<p>其实这只是Google Chart的一小部分的内容，你可以使用Google Chart画很多种图形，比如，饼图，线性图，地图，雷达图，散点图，维恩图而且可以生成二维码。</p>
+<p><a href="https://developers.google.com/chart/infographics/" target="_blank">Google Infographics</a>中提供的功能还有改变背景的颜色，使用渐变色填充背景或是使用条纹填充背景。只是这些功能我没有添加而已，如果需要可以添加，您的支持是我们最大的动力。</p>
+<p>比如：</p>
+<p class="noident" style="background:url('/images/content-picrow-bg1.gif') repeat scroll 50% top;text-align:center;padding:1em"><img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,s,3498db&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,s,3498db40&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=a,s,00000040|bg,s,3498db&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,lg,0,f39c12,0,76A4FB,1&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,lg,45,f39c12,0,76A4FB,1&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,ls,0,CCCCCC,0.15,FFFFFF,0.1&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,ls,90,999999,0.25,CCCCCC,0.25,FFFFFF,0.25&chco=FF0000" alt="" style="height:120px">
+<img src="http://chart.googleapis.com/chart?cht=tx&chs=120&chl=%5Clim_%7Bx%5Cto%5C0%7D%5Cfrac%7Bsinx%7D%7Bx%7D&chf=bg,ls,45,999999,0.25,CCCCCC,0.25,FFFFFF,0.25&chco=FF0000" alt="" style="height:120px"></p>
+<p>了解更多<a href="https://developers.google.com/chart/infographics/docs/formulas"  target="_blank">Google Infographics Formula</a></p>

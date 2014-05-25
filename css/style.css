@@ -203,25 +203,24 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 .footer .context{color:#CCC; margin:20px 30px; background:rgb(51,51,51);float:right}
 
 /*blog*/
-.blog h1 {
-	line-height:1.1em;
-}
-.blog .blog-content {
-	padding-top:2em;
-}
-.blog .blog-content p {
-	padding-bottom:0.5em;
-	line-height:1.5em;
-	text-indent:2em
-}
-.blog p.author{
-	padding-bottom:1em;
-}
-.blog p.date{
-	color:#bdc3c7;
-}
-.blog a{
-	color:#f39c12;
+.blog h1{line-height:1.1em;}
+.blog .blog-content {padding-top:2em;}
+.blog .blog-content p{padding-bottom:0.5em;line-height:1.5em;text-indent:2em}
+.blog p.noident	{text-indent:0;}
+.blog img{vertical-align:-10%;height:18px;}
+.blog .formula img{vertical-align:middle;height:30px;}
+.blog p.author{padding-bottom:1em;}
+.blog p.date{color:#bdc3c7;}
+.blog a{color:#f39c12;}
+.blog p.formula{text-align:center;position:relative}
+.blog span.formulaNO{
+	display:block;
+	position:absolute;
+	right:2em;
+	top:0.5em;
+	text-indent:0;
+	overflow:visible;
+	text-align:right;
 }
 /*news*/
 .news .title{
