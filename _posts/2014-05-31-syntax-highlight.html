@@ -1,0 +1,167 @@
+---
+layout: blog
+#文章标题
+title:  "JS语法高亮和THIS指针"
+author: "gucase"
+########基本设置"#########
+#自定义日期
+#date:   2014-05-16 11:12:47 +0800
+#categories: 文章分类，不同分类之间使用空格分割
+#tags: 文章的标签，即关键字，不同标签之间使用空格分割
+excerpt:  "在此处填写文章的摘要，默认为文章的第一段"
+###########高级设置##############
+#id: /blog/year/month/title
+#permalink: /blog/year/month/title.html
+#####
+#文档标题命名方式
+#文件名为:"年-月-日-文章题目"
+#文章题目最好为英文空格使用“-”代替
+#扩展名可以为:md、textile或者是html(视选用不同的语言写)
+#例如"2014-05-20-my-first-blog.html"
+---
+
+<p>今天，要解决的是要网页上显示高亮显示语法的功能。其实在这样的JavaScript插件还是比较多的，我原本想用<a href="http://alexgorbatchev.com/SyntaxHighlighter/" target="_blank">SyntaxHighlighter</a>的，据说他支持超多的语言，而且可以自定义。后来一想好像不能用，因为他不支持Matlab，要自定义语法。好吧，我知道好多人都不认为会Matlab不算是会编程。毕竟是不是IT专业的，所以应该还会有好多Matlab的编程，为将来考虑而已。自己不想那么麻烦，最后还是决定用<a href="http://highlightjs.org/" target="_blank">hightlight</a>。至少可以支持Matlab而且是配合Markdown的，以后说不定会使用Markdown所以用这个吧。但是他的缺点就是我觉得配色不漂亮，而且不能显示行号。毕竟用着方便，现在先用这个吧，需要的东西都会有的。</p>
+<p>还有一个要解决的问题是，对于变成语言里常用的符号，比如&lt;，可是在HTML中是特殊符号，需要转意，不能直接从源代码中复制粘贴。一开始的想法是直接复制粘贴，然后在浏览器端用Javascript进行转意，可是写起来不太方便，而且处理浏览器兼容比较麻烦。所以转意这个步骤只能预先处理了，于是就写了一个完成HTML字符转意的网页。我一直都说，JavaScript跟其他语言没有区别，能完成大部分编程，而且写起来比较方便。</p>
+<p>之所以想处理高亮的问题，是因为N天，在试着用纯文本写写东西，当然包括画图什么的，所以写了写东西，这样就可以贴出来了，先贴一篇。</p>
+<pre><code class=" hljs java">
+<span class="hljs-javadoc">/*******************结构体and类（C++）***************************
+TITLE：C++入门
+CHAPTER:this指针
+基础知识：结构体，指针，理解指向函数的指针
+
+    可以认为类是结构体的一个扩展，为了方便一些用途，其实在C++派生
+类的基类可以为结构体下面的内容不是完全符合实际情况，因为是“类似”，
+不是“相同”，下面首先使用与类的逻辑结构类似的结构体实现一个功能，我
+尽量也把语法的结构写的类似，然后使用类来完成向同的功能，体会一下什
+么是this指针。
+<span class="hljs-javadoctag">
+@date</span>:2014/04/04<span class="hljs-javadoctag">
+@version</span>:0.0.2<span class="hljs-javadoctag">
+@author</span>:zong
+*****************************************************************/</span>
+<span class="hljs-comment">//下面的是实现存储一个学生的学号和姓名（假设为int型）的程序</span>
+<span class="hljs-comment">//当然这样实现不是最好的方法，这不是为了理解this指针嘛</span>
+<span class="hljs-comment">//函数声明略</span>
+#defin OK <span class="hljs-number">1</span>
+typedef struct __student
+{
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> id;
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> name;
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-comment">//下面的初始化不符合C语言的语法规则，但是理解是什么意思就好</span>
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-comment">//只是这样理解,C++里面也不一定是这样做的（不同对象里不会保存这么多相同信息）</span>
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-comment">//定义指向函数的指针，并赋值为对应的函数</span>
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">void</span> (*construct)(pstudent th,<span class="hljs-keyword">int</span> myid,<span class="hljs-keyword">int</span> myname)=__construct;<span class="hljs-comment">//构造函数</span>
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> (*getId)(pstudent th)=__getId;
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> (*getName)(pstudent th)=__getName;
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> (*setId)(pstudent th,<span class="hljs-keyword">int</span> myid)=__setId;
+&nbsp;&nbsp;&nbsp;&nbsp; <span class="hljs-keyword">int</span> (*setName)(pstudent th,<span class="hljs-keyword">int</span> myname)=__setName;
+}student,*pstudent;
+<span class="hljs-comment">//函数（方法）定义</span>
+<span class="hljs-keyword">void</span> __construct(pstudent th,<span class="hljs-keyword">int</span> id,<span class="hljs-keyword">int</span> name)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;th-&gt;id=myid;<span class="hljs-comment">//注意：这里为什么要有指针th？</span>
+&nbsp;&nbsp;&nbsp;&nbsp;th-&gt;name=myname;
+}
+<span class="hljs-keyword">int</span> __getId(pstudent th)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> th-&gt;id;
+}
+<span class="hljs-keyword">int</span> __getName(pstudent th)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> th-&gt;name;
+}
+<span class="hljs-keyword">int</span> __setId(pstudent th,<span class="hljs-keyword">int</span> id)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;th-&gt;id=id;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> OK;
+}
+<span class="hljs-keyword">int</span> __setName(pstudent th,<span class="hljs-keyword">int</span> name)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;th-&gt;name=name;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> OK;
+}
+
+<span class="hljs-keyword">int</span> main()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;student stu1;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//类里面会自动调用该函数，当然需要与类名相同，因为这里是自己调用，我们可以任意命名</span>
+&nbsp;&nbsp;&nbsp;&nbsp;stu1.construct(&amp;stu1,<span class="hljs-number">001</span>,<span class="hljs-number">3451</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//这里第一个参数必须和结构体名相同(用我这个"类型"的规定，没有为什么)，因此，在类里可以少一个参数</span>
+&nbsp;&nbsp;&nbsp;&nbsp;stu1.setId(&amp;stu1,<span class="hljs-number">010</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> id=stu1.getId(&amp;stu1);
+&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="hljs-string">"stu1的学号是%3d\n"</span>,id);
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;student stu2;
+&nbsp;&nbsp;&nbsp;&nbsp;stu2.construct(&amp;stu2,<span class="hljs-number">002</span>,<span class="hljs-number">3458</span>);<span class="hljs-comment">//类里面会自动调用该函数</span>
+&nbsp;&nbsp;&nbsp;&nbsp;stu2.setName(&amp;stu2,<span class="hljs-number">3456</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span>  name=stu2.getNmae(&amp;stu2);
+&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="hljs-string">"stu1的姓名是%3d\n"</span>,name);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+<span class="hljs-comment">//===================================非常华丽的分割线====================================</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//当我们拥有了类。。。。一切就变的不一样了</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//</span>
+class student{
+ <span class="hljs-keyword">public</span>:
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> id;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> name;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//方法</span>
+&nbsp;&nbsp;&nbsp;&nbsp;student(<span class="hljs-keyword">int</span> id,<span class="hljs-keyword">int</span> name);<span class="hljs-comment">//构造函数</span>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//代码略</span>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> getId();
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> getName();
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> setId(<span class="hljs-keyword">int</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> setName(<span class="hljs-keyword">int</span>);
+}
+<span class="hljs-comment">//方法定义</span>
+<span class="hljs-comment">//其实所有对象共享相同一段方法的代码，就像上面结构体共享同样的函数一样</span>
+student::getId()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> id;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//注意与getName的不同</span>
+}
+student::getName()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;name; <span class="hljs-comment">//不致混淆的情况下this可以省略</span>
+}
+student::setId(<span class="hljs-keyword">int</span> myid)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;id=myid;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//注意与setName的区别</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> OK;
+}
+student::setName(<span class="hljs-keyword">int</span> name)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">this</span>-&gt;name=name; <span class="hljs-comment">//这个this不能省略</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> OK;
+}
+
+<span class="hljs-keyword">int</span> main()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;student stu1(<span class="hljs-number">001</span>,<span class="hljs-number">3451</span>);<span class="hljs-comment">//不需要代码写调用构造函数，编译器给我们加</span>
+&nbsp;&nbsp;&nbsp;&nbsp;stu1.setId(<span class="hljs-number">010</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> id=stu1.getId(); <span class="hljs-comment">//这里的参数跟结构体写法不一样哦&nbsp;&nbsp;&nbsp;&nbsp;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="hljs-string">"stu1的学号是%3d\n"</span>,id);
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;student stu2(<span class="hljs-number">002</span>,<span class="hljs-number">3458</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;stu1.setName(<span class="hljs-number">3456</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span>  name=stu2.getName();
+&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="hljs-string">"stu1的姓名是%4d\n"</span>,name);
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+<span class="hljs-javadoc">/*************************************************************************
+    其实可以看出，结构体中的th参数相当于this指针，在实现类中的方法的时候其
+实也采用了类似结构体写法的内存结构，只是对象不会保存那么多相同的信息，我这
+样写只是为了在调用方法的时候显得与对象更加一致。
+    当不同的结构体（对象）共享相同的函数，如果要改变某个结构体（对象）内部
+的变量，函数就需要知道是那个结构体（对象）调用了这个函数，比较好的解决方案
+就是在调用函数的时候传入一个指向结构体（对象）的指针，这就是th的作用，也就
+是对象里的this指针。
+    如前所述，类是结构体的扩展，类是为了方便我们写程序，既然几乎所有的共享
+函数都需要这个th指针，那么为了方便我们调用我们可以不再在函数里明显的加这个
+参数而是编译器编译的时候自动给帮我们加上这个参数，只是我们需要约定这个形参
+的名字而已——this。
+*************************************************************************/</span>
+</code></pre>
