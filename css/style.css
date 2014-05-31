@@ -212,6 +212,7 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 .blog p.author{padding-bottom:1em;}
 .blog p.date{color:#bdc3c7;}
 .blog a{color:#f39c12;}
+.blog code{font-size:16px;line-height:1.3em}
 .blog p.formula{text-align:center;position:relative}
 .blog span.formulaNO{
 	display:block;
