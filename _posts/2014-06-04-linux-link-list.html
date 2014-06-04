@@ -1,0 +1,131 @@
+---
+layout: blog
+#文章标题
+title:  "Linux内核链表负基础"
+author: "寿寿"
+########基本设置"#########
+#自定义日期
+#date:   2014-05-16 11:12:47 +0800
+#categories: 文章分类，不同分类之间使用空格分割
+#tags: 文章的标签，即关键字，不同标签之间使用空格分割
+excerpt:  "去年有人在需要学Linux内核链表，有许多东西动看不懂，毕竟我们不是软件专业的么，所以大概了解了一下Linux内核链表，其实如果你有了链表的知识，这写也不是很难，只是有些宏定义可能没有基础的人看不懂，所以我就给这些人解释一下。因为是宏定义而已，所以叫负基础。是在学内核Linux内核链表之前需要的知识"
+###########高级设置##############
+#id: /blog/year/month/title
+#permalink: /blog/year/month/title.html
+#####
+#文档标题命名方式
+#文件名为:"年-月-日-文章题目"
+#文章题目最好为英文空格使用“-”代替
+#扩展名可以为:md、textile或者是html(视选用不同的语言写)
+#例如"2014-05-20-my-first-blog.html"
+---
+
+<p>去年有人在需要学Linux内核链表，有许多东西动看不懂，毕竟我们不是软件专业的么，所以大概了解了一下Linux内核链表，其实如果你有了链表的知识，这写也不是很难，只是有些宏定义可能没有基础的人看不懂，所以我就给这些人解释一下。因为是宏定义而已，所以叫负基础。是在学内核Linux内核链表之前需要的知识。</p>
+
+<pre><code class=" hljs cpp">
+<span class="hljs-comment">/****************************Linux内核链表负基础*************************************************
+需要的基础知识：C语言链表（单链表就可以）
+**************************************************************************************************/</span>
+<span class="hljs-comment">//预备知识：</span>
+<span class="hljs-comment">/*******************C语言里的指针类型是干什么用的******************************************************
+当然，首先就是防止你不小心写错，本来是指向字符串的指针指向了整型，不是故意要这么用的话程序多半要出错的
+有了指针类型，给你一个提示，多半就会改过来了。
+
+其实最重要的我觉得还是指针的加减法，指针加1得到的指针是指向下一个元素的指针，正是指针的类型决定了地址要加多少
+行指针（其实我不喜欢这么叫）加1，是指向下一行元素，一行又多少个字节也是定义指针时有的(int (*p)[ELEMENT_NUM];)
+两个指针相减是指两个指针之间隔几个这种类型的变量，
+在大多数时候我们用的时候都是为了访问变量，指针++，就指向下一个变量是很方便的
+*********************************************************************************************************/</span>
+<span class="hljs-comment">/****************************C语言语法，下面a的值什么************************************/</span>
+<span class="hljs-keyword">int</span> a,b,c;
+...............
+a=({
+&nbsp;&nbsp;&nbsp;&nbsp;b=<span class="hljs-number">2</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;c=<span class="hljs-number">3</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;c-b;
+});
+<span class="hljs-comment">//答案是：1，也就是c-b；上述必须加()否则不行;没有为什么，语法规定</span>
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> node
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> a;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> b;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> c;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">struct</span> list_head <span class="hljs-built_in">list</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> d;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> e;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">int</span> f;
+&nbsp;&nbsp;&nbsp;&nbsp;
+}*NODE;
+<span class="hljs-keyword">struct</span> node inode;
+<span class="hljs-comment">/*****************************************首先问一个问题************************************************
+inode.b的地址比inode的地址大多少？
+（真正的地址值，没有规定大于4的字节对齐的话__不懂字节对齐的可以先忽略这句__
+INT占四个字节，答案应该是4。）
+&nbsp;&nbsp;&nbsp;&nbsp;注：假设下面忽略强制类型转换的地址相减指地址的直接相减，不再是原本C语言规定的（如果不懂这句也可以忽略）
+可以这样算（省略了强制类型转换）:设NODE p=&amp;inode;结果就是&amp;(inode.b)-p 也就是 &amp;(p-&gt;b)-p
+假设存在一种很特殊的情况（实际不会出现），inode分配的地址是0,也就是p等于0
+那么上述结果就可以化简为&amp;(0-&gt;b)，但是C语言里不支持这样的运算，除非...
+除非我们加上适当的强制类型转换(unsigned int) &amp;((struct node *)0-&gt;b)，注意跟&amp;(0-&gt;b)的区别
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个叫TYPE  这个叫MEMBER
+这东西经常用所以写成宏比较方便，上面的问题涉及两个参数：inode和inode.b
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、结构体的类型；2、结构体内变量的名字
+再定义typedef unsigned int size_t就有
+*/</span>
+<span class="hljs-preprocessor">#define offsetof(TYPE, MEMBER) ((size_t) &amp;((TYPE *)0)-&gt;MEMBER)</span>
+<span class="hljs-comment">//问题的答案就是offsetof(struct node,b)</span>
+<span class="hljs-comment">//所以这个宏的作用就是求MEMBER成员在结构体TYPE中的偏移地址。</span>
+
+
+<span class="hljs-comment">/**************************假设我只知道inode.list的地址ptr，怎么求inode的地址
+首先求inode.list比inode的地址大多少，然后从ptr地址中减去这个值就是inode的地址
+也就是(忽略强制类型转换):(ptr-offsetof(struct node,list))，同样注意与下面的区别
+加上必要的强制类型转换:(struct node *)((char *)ptr-offsetof(struct node,list))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个叫TYPE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;还叫ptr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;这个叫MEMBE
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│char占一个字节，offsetof求得的偏移以字节为单位
+也写成宏有：
+*/</span>
+<span class="hljs-preprocessor">#define container_of(ptr, type, member) (type *)((char *)ptr-offsetof(struct node,member))</span>
+<span class="hljs-comment">/**有时候我们非要给自己找麻烦，(ptr-offsetof(struct node,list))非要写成
+&nbsp;&nbsp;&nbsp;&nbsp;({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct list_head *__mptr=ptr;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__mptr-offsetof(struct node,list);
+&nbsp;&nbsp;&nbsp;&nbsp;})
+一个变量的类型可以用typeof()获得，加上强制类型转换，定义为宏就是
+*/</span>
+<span class="hljs-preprocessor">#define container_of(ptr, type, member) ({&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\</span>
+        <span class="hljs-keyword">const</span> typeof( ((type *)<span class="hljs-number">0</span>)-&gt;member ) *__mptr = (ptr);&nbsp;&nbsp;&nbsp;&nbsp;\
+        (type *)( (<span class="hljs-keyword">char</span> *)__mptr - offsetof(type,member) );})
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span class="hljs-comment">/**重命名一下*/</span>
+<span class="hljs-preprocessor">#define list_entry(ptr, type, member) container_of(ptr, type, member)</span>
+<span class="hljs-comment">//那么，上述问题的答案就是list_entry(ptr,struct node,list)</span>
+<span class="hljs-comment">//这个宏的作用就是在已知一个结构体中成员地址的情况下，返回结构体的起始地址</span>
+
+<span class="hljs-comment">/*****************************************华丽的分割线********************************************************************
+那么以后我们需要链表的时候就可以只将node中的list组成链表，然后linux中有操作这种链表的函数，不需要我们再定义函数操作链表了
+有了list_entry宏，得到了链表中list的地址，就可以方便的得到node的地址，访问其中的元素了
+          struct node    struct node     struct node    struct node    struct node    struct node    struct node      .......
+          {              {               {              {              {              {              {
+            int a;         int a;         int a;         int a;         int a;         int a;         int a;          .......
+            int b;         int b;         int b;         int b;         int b;         int b;         int b;          .......
+            int c;         int c;         int c;         int c;         int c;         int c;         int c;          .......
+ head------&gt;list;---------&gt;list;---------&gt;list;---------&gt;list;---------&gt;list;---------&gt;list;---------&gt;list;           .......
+            int d;         int d;         int d;         int d;         int d;         int d;         int d;          .......
+            int e;         int e;         int e;         int e;         int e;         int e;         int e;          .......
+            int f;         int f;         int f;         int f;         int f;         int f;         int f;          .......
+          }              }               }              }              }              }              }
+
+要获得第三个节点的地址只需要*/</span>
+list_entry(head-&gt;<span class="hljs-built_in">list</span>-&gt;<span class="hljs-built_in">list</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//第三个节点中list的的地址 </span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-keyword">struct</span> node,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//结构体</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-built_in">list</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-comment">//变量名</span>
+<span class="hljs-comment">//加入新的节点只要</span>
+NODE p =(NODE)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> node))
+list_add(&amp;(p-&gt;<span class="hljs-built_in">list</span>),&amp;head); <span class="hljs-comment">//Linux已经定义过得函数，把刚分配节点中的list加入链表（语法不一定对）</span>
+<span class="hljs-comment">//其他操作也类似，这样node节点中的list构成了一个链表，我们可以轻松的访问每一个节点的list变量</span>
+<span class="hljs-comment">//有了list_entry获得node的地址也不是什么难的事情</span>
+</code>
+</code></pre>

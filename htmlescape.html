@@ -10,14 +10,14 @@
 	<script>
 		function strtohtmlstr(str)
 		{
-			return str.replace(/[<>"&\t]/g,function(c){
+			return str.replace(/[<>"&\t ]/g,function(c){
 				var arr={
 					"<":"&lt;",
 					">":"&gt;",
 					'"':"&quot;",
 					"&":"&amp;",
 					"\t":"&nbsp;&nbsp;&nbsp;&nbsp;",
-					" ":"&nbsp",
+					" ":"&nbsp;",
 				}
 			return arr[c];
 			})
