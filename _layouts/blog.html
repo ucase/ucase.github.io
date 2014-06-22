@@ -47,7 +47,10 @@ for(i in imgs)
 	if( !h ){
 		h=30
 	}
-	img.src="http://chart.googleapis.com/chart?cht=tx&chs="+h+"&chf=bg,s,00000000&chl="+escape(strTex.value);
+	else{
+		h=h.nodeValue;
+	}
+	img.src="http://chart.googleapis.com/chart?cht=tx&chs="+h+"&chf=bg,s,00000000&chl="+encodeURIComponent(strTex.value);
 }
 </script>
 </div>

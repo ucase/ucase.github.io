@@ -207,19 +207,21 @@ input, select, textarea { font-family:Tahoma, Geneva, sans-serif; font-size:1em;
 .blog .blog-content {padding-top:2em;}
 .blog .blog-content p{padding-bottom:0.5em;line-height:1.5em;text-indent:2em}
 .blog p.noident	{text-indent:0;}
-.blog img{vertical-align:-10%;height:18px;}
+.blog .strong {color:#c0392b}
+.blog p.imgblock	{text-indent:0;text-align:center;}
+.blog .latex {vertical-align:-10%;height:18px;}
 .blog .formula img{vertical-align:middle;height:30px;}
 .blog p.author{padding-bottom:1em;}
 .blog p.date{color:#bdc3c7;}
 .blog a{color:#f39c12;}
 .blog code{font-size:16px;line-height:1.3em}
 .blog p.formula{text-align:center;position:relative}
-.blog code {overflow-x:scroll;}
+.blog code {overflow-x:auto;}
 .blog span.formulaNO{
 	display:block;
 	position:absolute;
 	right:2em;
-	top:0.5em;
+	top:0em;
 	text-indent:0;
 	overflow:visible;
 	text-align:right;
