@@ -28,7 +28,7 @@ excerpt:  "今天要解决在网页上输入公式的问题，一般我们在网
 <p>今天，就是要解决在网页上输入公式的问题，一般我们在网页上输入公式使用的都是用相关软件把公式做出来，然后截图，然或把图片保存到网页上，这是很麻烦的。今天体检回来找了上网找发现<a target="_blank" href="http://www.mathjax.org/">mathjax</a>支持<a target="_blank" href="http://www.latex-project.org/">Latex</a>的数学公式排版，不过好像这个虽然是在浏览器端解析但是其源码需要自己编译，看起来不是那么的方便。后来听<a target="_blank" href="http://www.ruanyifeng.com/blog/">阮一峰</a>说，<a href="https://developers.google.com/chart/" target="_blank">Google Chart</a>支持TeX，而且使用也很方便。反正我知道我说HTTP请求大家也不懂，总之就是你给Google发送TeX，Google给你返回对应的数学公式图片。很多时候我基本上不选择使用Google的服务，原因我就不说了，可是很多时候百度没有类似的服务，我就实在是没办法了。</p>
 <p>先给大家看结果吧。如果你实在不想输，直接点提交就好了。</p>
 <div style="background:#bdc3c7;padding:1em 2em">
-<form action="http://chart.googleapis.com/chart" method="post" target="_blank">
+<form action="http://chart.googleapis.com/chart" method="get" target="_blank">
 	<input type="hidden" id="cht" name="cht" value="tx" />
 	<p class="noident">
 		<label for="chs">图片大小：		
